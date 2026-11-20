@@ -72,8 +72,8 @@ void BentelKyo::send_command_async_(const uint8_t *cmd, int cmd_len, uint8_t pen
 
   // Log serial trace if enabled
   if (this->serial_trace_) {
-    ESP_LOGI(TAG, "TX [%d bytes]: %s", cmd_len,
-             format_hex_pretty(cmd, cmd_len).c_str());
+    char hex_buf[format_hex_pretty_size(MAX_LOG_BYTES)];
+    ESP_LOGV(TAG, "TX: %s", format_hex_pretty_to(hex_buf, sizeof(hex_buf), cmd, cmd_len));
   }
 
   // Send command bytes (fast: ~7ms for 6 bytes at 9600 baud)
@@ -127,8 +127,8 @@ void BentelKyo::loop() {
 
   // Log serial trace if enabled
   if (this->serial_trace_ && count > 0) {
-    ESP_LOGI(TAG, "RX [%d bytes]: %s", count,
-             format_hex_pretty(this->serial_rx_buf_, count).c_str());
+    char hex_buf[format_hex_pretty_size(MAX_LOG_BYTES)];
+    ESP_LOGV(TAG, "TX: %s", format_hex_pretty_to(hex_buf, sizeof(hex_buf), cmd, cmd_len));
   }
 
   if (count <= 0) {
@@ -1153,8 +1153,8 @@ int BentelKyo::send_message_(const uint8_t *cmd, int cmd_len, uint8_t *response,
 
   // Send command
   if (this->serial_trace_) {
-    ESP_LOGI(TAG, "TX [%d bytes]: %s", cmd_len,
-             format_hex_pretty(cmd, cmd_len).c_str());
+    char hex_buf[format_hex_pretty_size(MAX_LOG_BYTES)];
+    ESP_LOGV(TAG, "TX: %s", format_hex_pretty_to(hex_buf, sizeof(hex_buf), cmd, cmd_len));
   }
   this->write_array(cmd, cmd_len);
 
@@ -1199,8 +1199,8 @@ int BentelKyo::send_message_(const uint8_t *cmd, int cmd_len, uint8_t *response,
   memcpy(response, rx_buf, index);
 
   if (this->serial_trace_) {
-    ESP_LOGI(TAG, "RX [%d bytes]: %s", index,
-             format_hex_pretty(rx_buf, index).c_str());
+    char hex_buf[format_hex_pretty_size(MAX_LOG_BYTES)];
+    ESP_LOGV(TAG, "TX: %s", format_hex_pretty_to(hex_buf, sizeof(hex_buf), cmd, cmd_len));
   }
 
   return index;
