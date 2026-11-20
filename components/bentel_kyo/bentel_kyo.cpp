@@ -13,6 +13,13 @@
 #include <cstdlib>
 #include <ctime>
 
+// get_name() deprecated since ESPHome 2026.11
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 11, 0)
+#define KYO_ENTITY_NAME(e) LOG_STR_ARG((e)->get_log_name())
+#else
+#define KYO_ENTITY_NAME(e) ((e)->get_name().c_str())
+#endif
+
 namespace esphome {
 namespace bentel_kyo {
 
@@ -25,7 +32,8 @@ constexpr uint8_t BentelKyo::CMD_GET_VERSION[];
 constexpr uint8_t BentelKyo::CMD_RESET_ALARMS[];
 
 // Max bytes shown in hex dumps of the serial log
-static constexpr size_t MAX_LOG_BYTES = 64;
+static const char *const TAG = "bentel_kyo";
+static constexpr size_t MAX_LOG_BYTES = 255;
 
 void BentelKyo::setup() {
   ESP_LOGI(TAG, "Setting up Bentel KYO hub...");
@@ -831,7 +839,7 @@ void BentelKyo::publish_binary_sensors_() {
     // Log state changes when log_trace is enabled
     if (this->log_trace_ && state != entry.sensor->state) {
       ESP_LOGI(TAG, "State change: %s [idx=%d] %s -> %s",
-               entry.sensor->get_name().c_str(), idx,
+               KYO_ENTITY_NAME(entry.sensor), idx,
                entry.sensor->state ? "ON" : "OFF",
                state ? "ON" : "OFF");
     }
