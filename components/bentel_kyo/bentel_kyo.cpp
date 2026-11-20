@@ -24,6 +24,9 @@ constexpr uint8_t BentelKyo::CMD_GET_PARTITION_KYO8[];
 constexpr uint8_t BentelKyo::CMD_GET_VERSION[];
 constexpr uint8_t BentelKyo::CMD_RESET_ALARMS[];
 
+// Max bytes shown in hex dumps of the serial log
+static constexpr size_t MAX_LOG_BYTES = 64;
+
 void BentelKyo::setup() {
   ESP_LOGI(TAG, "Setting up Bentel KYO hub...");
   this->communication_ok_ = false;
