@@ -32,7 +32,6 @@ constexpr uint8_t BentelKyo::CMD_GET_VERSION[];
 constexpr uint8_t BentelKyo::CMD_RESET_ALARMS[];
 
 // Max bytes shown in hex dumps of the serial log
-static const char *const TAG = "bentel_kyo";
 static constexpr size_t MAX_LOG_BYTES = 255;
 
 void BentelKyo::setup() {
